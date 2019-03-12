@@ -49,8 +49,8 @@ fs.readFile('export.xml', 'utf8', (err, contents) => {
         }
     })
 
-    const writer = csvWriter()
     writer.pipe(fs.createWriteStream('articles.csv'))
     articles.forEach(article => writer.write(article))
     writer.end()
+    console.log('done')
 })
