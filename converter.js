@@ -21,12 +21,12 @@ fs.readFile('export.xml', 'utf8', (err, contents) => {
 
     const flatCategories = leafNodes.map(ln => {
         let parent = categories.find(c => c.id === ln.parentId)
-        let name = ln.name
+        const names = [ln.name]
         while (parent) {
-            name = `${name} | ${parent.name}`
+            names.push(parent.name)
             parent = categories.find(c => c.id === parent.parentId)
         }
-        ln.name = name
+        ln.name = names.reverse().join(' | ')
         return ln
     })
     const articles = xpath(doc, '//article').map(element => {
