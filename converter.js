@@ -4,7 +4,7 @@ const dom = require('xmldom').DOMParser
 const csvWriter = require('csv-write-stream')
 const writer = csvWriter()
 
-fs.readFile('export.xml', 'utf8', function (err, contents) {
+fs.readFile('export.xml', 'utf8', (err, contents) => {
     if (err) {
         console.log(err)
     }
