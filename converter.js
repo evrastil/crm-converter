@@ -17,26 +17,20 @@ fs.readFile('export.xml', 'utf8', function (err, contents) {
             parentId: parentId ? parentId.data : null
         }
     })
-    const leafNodes = categories.filter(c => {
-        const found = categories.find(f => c.id === f.parentId)
-        if(found){
-            return false
-        }
-        return true
-    })
+    const leafNodes = categories.filter(c => !categories.find(f => c.id === f.parentId))
+
     const flatCategories = leafNodes.map(ln => {
-        let parent = categories.find(c=>c.id ===ln.parentId)
+        let parent = categories.find(c => c.id === ln.parentId)
         let name = ln.name
-        while(parent){
-            name = name +' | '+parent.name
-            parent = categories.find(c=>c.id ===parent.parentId)
+        while (parent) {
+            name = `${name} | ${parent.name}`
+            parent = categories.find(c => c.id === parent.parentId)
         }
         ln.name = name
         return ln
     })
     const articles = xpath(doc, "//article").map(element => {
         const na = ''
-        const longDescription = element.childNodes['3'].firstChild
         const shortDescription = element.childNodes['2'].firstChild
         const manufacturer = element.childNodes['5'].firstChild
         const nettoprice = element.childNodes['6'].firstChild
