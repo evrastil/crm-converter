@@ -36,7 +36,7 @@ fs.readFile('export.xml', 'utf8', function (err, contents) {
     })
     const articles = xpath(doc, "//article").map(element => {
         const longDescription = element.childNodes['3'].firstChild
-        const na = 'N/A'
+        const na = ''
 
         return {
             manufacturer: element.childNodes['5'].firstChild ? element.childNodes['5'].firstChild.data : na,
