@@ -18,22 +18,25 @@ fs.readFile('export.xml', 'utf8', function (err, contents) {
             parentId: parentId ? parentId.data : null
         }
     })
-
-    const flatCategories = categories.map(category => {
-        if (category.parentId) {
-            const cat1 = categories.find(c => c.id === category.parentId)
-            if(cat1) {
-                category.name = `${cat1.name} | ${category.name}`
-                if (cat1.parentId) {
-                    const cat2 = categories.find(c => c.id === cat1.parentId)
-                    if(cat2) {
-                        category.name = `${cat2.name} | ${category.name}`
-                    }
-                }
-            }
+    const leafNodes = categories.filter(c => {
+        const found = categories.find(f => c.id === f.parentId)
+        if(found){
+            return false
         }
-        return category
+        return true
     })
+
+    const flatCategories = leafNodes.map(ln => {
+        let parent = categories.find(c=>c.id ===ln.parentId)
+        let name = ln.name
+        while(parent){
+            name = name +' | '+parent.name
+            parent = categories.find(c=>c.id ===parent.parentId)
+        }
+        ln.name = name
+        return ln
+    })
+
     const articles = xpath(doc, "//article").map(element => {
         const longDescription = element.childNodes['3'].firstChild
         const na = ''
@@ -44,7 +47,7 @@ fs.readFile('export.xml', 'utf8', function (err, contents) {
             shortDescription: element.childNodes['2'].firstChild ? element.childNodes['2'].firstChild.data : na,
             nettoprice: element.childNodes['6'].firstChild ? element.childNodes['6'].firstChild.data : na,
             bruttoprice: element.childNodes['7'].firstChild ? element.childNodes['7'].firstChild.data : na,
-            images: element.childNodes['9'].firstChild ? element.childNodes['9'].firstChild.data : na,
+            images: element.childNodes['12'].firstChild && element.childNodes['12'].firstChild.firstChild ? element.childNodes['12'].firstChild.firstChild.data : na,
             category: element.childNodes['14'].firstChild ? flatCategories.find(category => category.id === element.childNodes['14'].firstChild.data).name : na
         }
     })
