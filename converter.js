@@ -8,7 +8,6 @@ fs.readFile('export.xml', 'utf8', function (err, contents) {
     if (err) {
         console.log(err)
     }
-
     const doc = new dom().parseFromString(contents)
     const categories = xpath(doc, "//categoryList/category").map(element => {
         const parentId = element.childNodes['2'].firstChild;
@@ -25,7 +24,6 @@ fs.readFile('export.xml', 'utf8', function (err, contents) {
         }
         return true
     })
-
     const flatCategories = leafNodes.map(ln => {
         let parent = categories.find(c=>c.id ===ln.parentId)
         let name = ln.name
@@ -36,19 +34,24 @@ fs.readFile('export.xml', 'utf8', function (err, contents) {
         ln.name = name
         return ln
     })
-
     const articles = xpath(doc, "//article").map(element => {
-        const longDescription = element.childNodes['3'].firstChild
         const na = ''
-
+        const longDescription = element.childNodes['3'].firstChild
+        const shortDescription = element.childNodes['2'].firstChild
+        const manufacturer = element.childNodes['5'].firstChild
+        const nettoprice = element.childNodes['6'].firstChild
+        const bruttoprice = element.childNodes['7'].firstChild
+        const images = element.childNodes['12'].firstChild
+        const cat = element.childNodes['14'].firstChild
+        const shortTitle = element.childNodes['0'].firstChild
         return {
-            manufacturer: element.childNodes['5'].firstChild ? element.childNodes['5'].firstChild.data : na,
-            shortTitle: element.childNodes['0'].firstChild ? element.childNodes['0'].firstChild.data : na,
-            shortDescription: element.childNodes['2'].firstChild ? element.childNodes['2'].firstChild.data : na,
-            nettoprice: element.childNodes['6'].firstChild ? element.childNodes['6'].firstChild.data : na,
-            bruttoprice: element.childNodes['7'].firstChild ? element.childNodes['7'].firstChild.data : na,
-            images: element.childNodes['12'].firstChild && element.childNodes['12'].firstChild.firstChild ? element.childNodes['12'].firstChild.firstChild.data : na,
-            category: element.childNodes['14'].firstChild ? flatCategories.find(category => category.id === element.childNodes['14'].firstChild.data).name : na
+            manufacturer: manufacturer ? manufacturer.data : na,
+            shortTitle: shortTitle ? shortTitle.data : na,
+            shortDescription: shortDescription ? shortDescription.data : na,
+            nettoprice: nettoprice ? nettoprice.data : na,
+            bruttoprice: bruttoprice ? bruttoprice.data : na,
+            images: images && images.firstChild ? images.firstChild.data : na,
+            category: cat ? flatCategories.find(category => category.id === cat.data).name : na
         }
     })
 
