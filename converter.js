@@ -9,7 +9,7 @@ fs.readFile('export.xml', 'utf8', function (err, contents) {
         console.log(err)
     }
     const doc = new dom().parseFromString(contents)
-    const categories = xpath(doc, "//categoryList/category").map(element => {
+    const categories = xpath(doc, '//categoryList/category').map(element => {
         const parentId = element.childNodes['2'].firstChild;
         return {
             name: element.childNodes['0'].firstChild.data,
@@ -29,7 +29,7 @@ fs.readFile('export.xml', 'utf8', function (err, contents) {
         ln.name = name
         return ln
     })
-    const articles = xpath(doc, "//article").map(element => {
+    const articles = xpath(doc, '//article').map(element => {
         const na = ''
         const shortDescription = element.childNodes['2'].firstChild
         const manufacturer = element.childNodes['5'].firstChild
