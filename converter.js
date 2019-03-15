@@ -39,6 +39,7 @@ fs.readFile('export.xml', 'utf8', (err, contents) => {
         const imageKeys = Object.keys(element.childNodes).filter(key=> element.childNodes[key].tagName ==='images')
         const categoryKeys = Object.keys(element.childNodes).filter(key=> element.childNodes[key].tagName ==='categoryId')
         const shortTitleKeys = Object.keys(element.childNodes).filter(key=> element.childNodes[key].tagName ==='shortTitle')
+        const longTitleKeys = Object.keys(element.childNodes).filter(key=> element.childNodes[key].tagName ==='longTitle')
 
         const na = ''
         const shortDescription = element.childNodes[shortDescriptionKeys[0]].firstChild
@@ -49,12 +50,14 @@ fs.readFile('export.xml', 'utf8', (err, contents) => {
         const images = element.childNodes[imageKeys[0]].firstChild
         const cat = element.childNodes[categoryKeys[0]].firstChild
         const shortTitle = element.childNodes[shortTitleKeys[0]].firstChild
+        const longTitle = element.childNodes[longTitleKeys[0]].firstChild
 
         const sanitize = (content) => content.replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]+/g,' ')
 
         return {
             manufacturer: manufacturer ? sanitize(manufacturer.data) : na,
             shortTitle: shortTitle ? sanitize(shortTitle.data) : na,
+            longTitle: longTitle ? sanitize(longTitle.data) : na,
             shortDescription: shortDescription ? sanitize(shortDescription.data) : na,
             longDescription: longDescription? sanitize(h2p(longDescription.data)): na,
             nettoprice: nettoprice ? nettoprice.data : na,
