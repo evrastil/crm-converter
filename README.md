@@ -6,3 +6,4 @@
 - place export.xml in the script folder
 - run `node convert.js`
 - article.csv will be created in script folder
+- csv separator is "$" to avoid conflicts with text commas and other special characters
