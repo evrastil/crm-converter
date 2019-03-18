@@ -82,9 +82,19 @@ XlsxPopulate.fromFileAsync("cenik.xlsx")
                 }
             })
 
-            writer.pipe(fs.createWriteStream('articles.csv'))
-            articles.forEach(article => writer.write(article))
-            writer.end()
+            const xlsArticles = articles.map(a => [a.articleId, a.manufacturer, a.shortTitle, a.longTitle, a.shortDescription, a.longDescription,
+                a.nettoprice, a.bruttoprice, a.price, a.images, a.category])
+            xlsArticles.unshift(['articleId', 'manufacturer', 'shortTitle', 'longTitle', 'shortDescription', 'longDescription', 'nettoprice', 'bruttoprice', 'price', 'images', 'category'])
+
+            XlsxPopulate.fromBlankAsync()
+                .then(workbook => {
+                    workbook.sheet("Sheet1").cell("A1").value(xlsArticles)
+                    return workbook.toFileAsync("articles.xlsx");
+                })
+
+            // writer.pipe(fs.createWriteStream('articles.csv'))
+            // articles.forEach(article => writer.write(article))
+            // writer.end()
             console.log('done')
         })
     })
