@@ -55,6 +55,7 @@ fs.readFile('export.xml', 'utf8', (err, contents) => {
         const sanitize = (content) => content.replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]+/g,' ')
 
         return {
+            articleId: element.attributes['0'].value,
             manufacturer: manufacturer ? sanitize(manufacturer.data) : na,
             shortTitle: shortTitle ? sanitize(shortTitle.data) : na,
             longTitle: longTitle ? sanitize(longTitle.data) : na,
