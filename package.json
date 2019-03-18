@@ -4,6 +4,7 @@
   "dependencies": {
     "csv-write-stream": "^2.0.0",
     "html2plaintext": "^2.1.2",
+    "xlsx-populate": "^1.19.1",
     "xmldom": "^0.1.27",
     "xpath.js": "^1.1.0"
   }
